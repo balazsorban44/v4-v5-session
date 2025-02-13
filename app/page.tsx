@@ -1,27 +1,18 @@
-"use client";
+import { signIn, auth } from "@/auth";
 
-import { SessionProvider, signIn, useSession } from "next-auth/react";
-
-function Home() {
-  const { data } = useSession();
+export default async function Page() {
+  const data = await auth();
   return (
     <div>
-      <button
-        onClick={() => {
-          signIn("github");
+      <form
+        action={async () => {
+          "use server";
+          await signIn("github");
         }}
       >
-        Sign in
-      </button>
+        <button>Sign in</button>
+      </form>
       <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <SessionProvider>
-      <Home />
-    </SessionProvider>
   );
 }
